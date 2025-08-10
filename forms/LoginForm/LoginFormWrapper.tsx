@@ -1,10 +1,9 @@
-import LoginProviderButtons from "@/components/LoginProvidersButtons/LoginProviderButtons";
+import LoginForm from "./LoginForm";
 
 const LoginFormWrapper = () => {
   return (
     <div className="authFormWrapper">
-      <span>LoginFormWrapper</span>
-      <LoginProviderButtons />
+      <LoginForm />
     </div>
   );
 };

@@ -10,10 +10,13 @@ interface Props {
 
 const AuthFormWrapper = ({ children, gotoHref, gotoLabel, title }: Props) => {
   return (
-    <div className="p-4 mx-auto w-full items-center max-w-2xl flex flex-col bg-first">
-      <h2 className="text-2xl font-semibold">{title}</h2>
+    <div className="pt-8 rounded-md px-4 mx-auto w-full items-center max-w-2xl flex flex-col bg-first">
+      <h2 className="text-2xl font-semibold mb-8">{title}</h2>
       {children}
-      <Link className="hover:underline underline-offset-2" href={gotoHref}>
+      <Link
+        className="hover:underline text-gray-600 mt-8 py-0.5 underline-offset-2"
+        href={gotoHref}
+      >
         {gotoLabel}
       </Link>
     </div>
