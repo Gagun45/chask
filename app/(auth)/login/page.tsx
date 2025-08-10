@@ -1,5 +1,5 @@
 import AuthFormWrapper from "@/forms/AuthFormWrapper";
-import LoginFormWrapper from "@/forms/LoginForm/LoginFormWrapper";
+import LoginForm from "@/forms/LoginForm/LoginForm";
 
 const LoginPage = () => {
   return (
@@ -8,7 +8,9 @@ const LoginPage = () => {
       gotoLabel="Don`t have an account? Register"
       title="Login"
     >
-      <LoginFormWrapper />
+      <div className="authFormWrapper">
+        <LoginForm />
+      </div>
     </AuthFormWrapper>
   );
 };
