@@ -1,10 +1,9 @@
-import LoginProviderButtons from "@/components/LoginProvidersButtons/LoginProviderButtons";
+import RegisterForm from "./RegisterForm";
 
 const RegisterFormWrapper = () => {
   return (
     <div className="authFormWrapper">
-      <span>RegisteRegisterFormWrapperrForm</span>
-      <LoginProviderButtons />
+      <RegisterForm/>
     </div>
   );
 };
