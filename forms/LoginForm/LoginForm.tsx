@@ -11,16 +11,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { loginFormData } from "@/utils/types";
+import { loginFormSchema } from "@/utils/zod/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-type loginFormData = z.infer<typeof loginFormSchema>;
-
-const loginFormSchema = z.object({
-  email: z.email({ message: "Invalid email" }),
-  password: z.string().min(8, "Password must be at least 8 chars long"),
-});
 
 const LoginForm = () => {
   const form = useForm<loginFormData>({
@@ -31,8 +26,9 @@ const LoginForm = () => {
     },
   });
 
-  const onLogin = (values: loginFormData) => {
-    console.log(values);
+  const onLogin = async (values: loginFormData) => {
+    const res = await signIn("credentials", { ...values, redirect: false });
+    if (res.error) form.setError("root", { message: "Invalid credentials" });
   };
   return (
     <Form {...form}>
@@ -64,6 +60,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
+        <FormMessage>{form.formState.errors.root?.message}</FormMessage>
         <Button className="w-full">Login</Button>
       </form>
       <LoginProviderButtons />
