@@ -10,7 +10,7 @@ const LoginProviderButtons = () => {
       <div className="flex flex-col sm:flex-row w-full gap-4">
         <Button
           type="button"
-          variant={"secondary"}
+          variant={"custom"}
           onClick={() => signIn("google")}
           className="grow"
         >
@@ -18,7 +18,7 @@ const LoginProviderButtons = () => {
         </Button>
         <Button
           type="button"
-          variant={"secondary"}
+          variant={'custom'}
           onClick={() => signIn("github")}
           className="grow"
         >

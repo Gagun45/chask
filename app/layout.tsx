@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar/app-sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,11 +32,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>
-          <Navbar />
-          {children}
-          <Toaster richColors />
-        </SessionProvider>
+        <SidebarProvider>
+          <SessionProvider>
+            <AppSidebar />
+            <div className="grow">
+              <Navbar />
+              {children}
+            </div>
+            <Toaster richColors />
+          </SessionProvider>
+        </SidebarProvider>
       </body>
     </html>
   );

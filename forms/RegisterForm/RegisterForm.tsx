@@ -36,7 +36,7 @@ const RegisterForm = () => {
     startTransition(async () => {
       const res = await register(values);
       if (res.error) {
-        form.setError("root", { message: 'Something went wrong' });
+        form.setError("root", { message: "Something went wrong" });
         return;
       }
       if (res.success) {
@@ -81,7 +81,9 @@ const RegisterForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>
+                Name <span className="text-xs">(optional)</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="John Doe" {...field} />
               </FormControl>
@@ -89,11 +91,13 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <FormMessage className="authErrorFormMessage">{form.formState.errors.root?.message}</FormMessage>
+        <FormMessage className="authErrorFormMessage">
+          {form.formState.errors.root?.message}
+        </FormMessage>
         {isPending ? (
           <LoadingButton className="w-full" />
         ) : (
-          <Button className="w-full">Register</Button>
+          <Button className="w-full tracking-widest text-lg">Register</Button>
         )}
       </form>
       <LoginProviderButtons />

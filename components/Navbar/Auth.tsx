@@ -10,7 +10,7 @@ const Auth = () => {
   if (status === "loading") return <></>;
   if (status === "unauthenticated")
     return (
-      <Link className={buttonVariants({ variant: "default" })} href={"/login"}>
+      <Link className={buttonVariants({ variant: "custom" })} href={"/login"}>
         Login
       </Link>
     );

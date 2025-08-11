@@ -74,11 +74,15 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <FormMessage className="authErrorFormMessage">{form.formState.errors.root?.message}</FormMessage>
+        <FormMessage className="authErrorFormMessage">
+          {form.formState.errors.root?.message}
+        </FormMessage>
         {isPending ? (
           <LoadingButton className="w-full" />
         ) : (
-          <Button type="submit" className="w-full">Login</Button>
+          <Button type="submit" className="w-full tracking-widest text-lg">
+            Login
+          </Button>
         )}
       </form>
       <LoginProviderButtons />
