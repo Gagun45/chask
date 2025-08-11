@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
-import { signOut, useSession } from "next-auth/react";
+import { buttonVariants } from "../ui/button";
+import { useSession } from "next-auth/react";
+import UserMenu from "./UserMenu/UserMenu";
 
 const Auth = () => {
   const { status } = useSession();
@@ -15,6 +16,6 @@ const Auth = () => {
       </Link>
     );
 
-  return <Button onClick={() => signOut()}>Logout</Button>;
+  return <UserMenu />;
 };
 export default Auth;

@@ -36,7 +36,7 @@ const RegisterForm = () => {
     startTransition(async () => {
       const res = await register(values);
       if (res.error) {
-        form.setError("root", { message: "Something went wrong" });
+        form.setError("root", { message: res.error });
         return;
       }
       if (res.success) {
@@ -81,7 +81,7 @@ const RegisterForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              <FormLabel className="gap-1">
                 Name <span className="text-xs">(optional)</span>
               </FormLabel>
               <FormControl>

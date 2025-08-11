@@ -7,7 +7,7 @@ const Navbar = () => {
     <header className="grid grid-cols-3 items-center ">
       <SidebarTrigger />
       <Logo />
-      <div className="w-fit ml-auto">
+      <div className="w-fit ml-auto flex">
         <Auth />
       </div>
     </header>
