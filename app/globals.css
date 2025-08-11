@@ -142,4 +142,7 @@
   .authFormWrapper {
     @apply w-full max-w-md space-y-4
   }
+  .authErrorFormMessage {
+    @apply !text-lg font-semibold
+  }
 }

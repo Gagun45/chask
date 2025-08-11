@@ -89,7 +89,7 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <FormMessage>{form.formState.errors.root?.message}</FormMessage>
+        <FormMessage className="authErrorFormMessage">{form.formState.errors.root?.message}</FormMessage>
         {isPending ? (
           <LoadingButton className="w-full" />
         ) : (

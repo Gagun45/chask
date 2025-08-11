@@ -7,20 +7,22 @@ const LoginProviderButtons = () => {
   return (
     <div className="flex flex-col max-w-md w-full gap-4">
       <span className="text-center">or</span>
-      <div className="flex w-full gap-4">
+      <div className="flex flex-col sm:flex-row w-full gap-4">
         <Button
+          type="button"
           variant={"secondary"}
           onClick={() => signIn("google")}
           className="grow"
         >
-          Login via Google
+          Continue with Google
         </Button>
         <Button
+          type="button"
           variant={"secondary"}
           onClick={() => signIn("github")}
           className="grow"
         >
-          Login via Github
+          Continue with Github
         </Button>
       </div>
     </div>

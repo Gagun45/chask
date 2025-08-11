@@ -35,7 +35,7 @@ const LoginForm = () => {
     startTransition(async () => {
       const res = await signIn("credentials", { ...values, redirect: false });
       if (res.error) {
-        form.setError("root", { message: 'Invalid credentials' });
+        form.setError("root", { message: "Invalid credentials" });
         return;
       }
       if (res.ok) {
@@ -74,11 +74,11 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <FormMessage>{form.formState.errors.root?.message}</FormMessage>
+        <FormMessage className="authErrorFormMessage">{form.formState.errors.root?.message}</FormMessage>
         {isPending ? (
           <LoadingButton className="w-full" />
         ) : (
-          <Button className="w-full">Login</Button>
+          <Button type="submit" className="w-full">Login</Button>
         )}
       </form>
       <LoginProviderButtons />
