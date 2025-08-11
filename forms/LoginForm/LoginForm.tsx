@@ -64,11 +64,9 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <div className="space-y-4">
-          <Button className="w-full">Login</Button>
-          <LoginProviderButtons />
-        </div>
+        <Button className="w-full">Login</Button>
       </form>
+      <LoginProviderButtons />
     </Form>
   );
 };

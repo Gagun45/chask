@@ -11,17 +11,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { register } from "@/utils/actions/auth.actions";
+import type { registerFormData } from "@/utils/types";
+import { registerFormSchema } from "@/utils/zod/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-type registerFormData = z.infer<typeof registerFormSchema>;
-
-const registerFormSchema = z.object({
-  email: z.email({ message: "Invalid email" }),
-  password: z.string().min(8, "Password must be at least 8 chars long"),
-  username: z.string().min(6, "Username must be 6 chars at least"),
-});
 
 const RegisterForm = () => {
   const form = useForm<registerFormData>({
@@ -29,11 +23,12 @@ const RegisterForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
   });
 
-  const onLogin = (values: registerFormData) => {
-    console.log(values);
+  const onLogin = async (values: registerFormData) => {
+    await register(values);
   };
   return (
     <Form {...form}>
@@ -68,10 +63,10 @@ const RegisterForm = () => {
 
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="John Doe" {...field} />
               </FormControl>
@@ -79,11 +74,9 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <div className="space-y-4">
-          <Button className="w-full">Register</Button>
-          <LoginProviderButtons />
-        </div>
+        <Button className="w-full">Register</Button>
       </form>
+      <LoginProviderButtons />
     </Form>
   );
 };

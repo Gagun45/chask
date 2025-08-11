@@ -1,12 +1,12 @@
 import Link from "next/link";
+import Auth from "./Auth";
 
 const Navbar = () => {
   return (
     <header className="justify-between items-center ">
-      <span>Logo</span>
-      <div className="flex items-center gap-2">
-        <Link href={"/login"}>Login</Link>
-      </div>
+      <Link href={"/"}>Logo</Link>
+      <Link href={"/protected"}>Protected</Link>
+      <Auth />
     </header>
   );
 };
