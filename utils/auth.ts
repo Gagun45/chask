@@ -2,15 +2,43 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/prisma/prisma";
 import authConfig from "./auth.config";
+import { v4 as uuid } from "uuid";
+import { hashSync } from "bcryptjs";
+import type { Prisma } from "@prisma/client";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   events: {
+    async createUser({ user }) {
+      const hashedPassword = hashSync(uuid().slice(0, 16));
+      await prisma.user.update({
+        where: { email: user.email! },
+        data: { password: hashedPassword },
+      });
+    },
     async linkAccount({ profile }) {
+      const existingUser = await prisma.user.findUnique({
+        where: { email: profile.email! },
+      });
+
+      if (!existingUser) return;
+
+      const updateData: Prisma.UserUpdateInput = {};
+
+      if (!existingUser?.emailVerified) {
+        updateData.emailVerified = new Date();
+      }
+      if (!existingUser.image && profile.image) {
+        updateData.image = profile.image;
+      }
+      if (!existingUser.name && profile.name) {
+        updateData.name = profile.name;
+      }
+      
       await prisma.user.update({
         where: { email: profile.email!, emailVerified: null },
-        data: { emailVerified: new Date() },
+        data: updateData,
       });
     },
   },

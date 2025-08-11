@@ -1,4 +1,4 @@
-import { compare } from "bcryptjs";
+import { compareSync } from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
@@ -16,13 +16,12 @@ export default {
         password: {},
       },
       async authorize(credentials) {
-        console.log("authorizsadasdas", credentials);
         const parsedData = loginFormSchema.safeParse(credentials);
         if (parsedData.error) return null;
         const { email, password } = parsedData.data;
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (!existingUser || !existingUser.password) return null;
-        const passwordMatch = compare(password, existingUser.password);
+        const passwordMatch = compareSync(password, existingUser.password);
         if (!passwordMatch) return null;
         return existingUser;
       },

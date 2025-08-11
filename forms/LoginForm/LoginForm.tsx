@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingButton from "@/components/LoadingButton";
 import LoginProviderButtons from "@/components/LoginProvidersButtons/LoginProviderButtons";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +16,13 @@ import type { loginFormData } from "@/utils/types";
 import { loginFormSchema } from "@/utils/zod/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const LoginForm = () => {
+  const [isPending, startTransition] = useTransition();
   const form = useForm<loginFormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -26,9 +31,18 @@ const LoginForm = () => {
     },
   });
 
-  const onLogin = async (values: loginFormData) => {
-    const res = await signIn("credentials", { ...values, redirect: false });
-    if (res.error) form.setError("root", { message: "Invalid credentials" });
+  const onLogin = (values: loginFormData) => {
+    startTransition(async () => {
+      const res = await signIn("credentials", { ...values, redirect: false });
+      if (res.error) {
+        form.setError("root", { message: 'Invalid credentials' });
+        return;
+      }
+      if (res.ok) {
+        toast.success("Logged in successfully");
+        redirect("/");
+      }
+    });
   };
   return (
     <Form {...form}>
@@ -61,7 +75,11 @@ const LoginForm = () => {
           )}
         />
         <FormMessage>{form.formState.errors.root?.message}</FormMessage>
-        <Button className="w-full">Login</Button>
+        {isPending ? (
+          <LoadingButton className="w-full" />
+        ) : (
+          <Button className="w-full">Login</Button>
+        )}
       </form>
       <LoginProviderButtons />
     </Form>

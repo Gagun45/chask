@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingButton from "@/components/LoadingButton";
 import LoginProviderButtons from "@/components/LoginProvidersButtons/LoginProviderButtons";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +16,13 @@ import { register } from "@/utils/actions/auth.actions";
 import type { registerFormData } from "@/utils/types";
 import { registerFormSchema } from "@/utils/zod/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { redirect } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
+  const [isPending, startTransition] = useTransition();
   const form = useForm<registerFormData>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -27,8 +32,18 @@ const RegisterForm = () => {
     },
   });
 
-  const onLogin = async (values: registerFormData) => {
-    await register(values);
+  const onLogin = (values: registerFormData) => {
+    startTransition(async () => {
+      const res = await register(values);
+      if (res.error) {
+        form.setError("root", { message: 'Something went wrong' });
+        return;
+      }
+      if (res.success) {
+        toast.success("User created");
+        redirect("/login");
+      }
+    });
   };
   return (
     <Form {...form}>
@@ -74,7 +89,12 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full">Register</Button>
+        <FormMessage>{form.formState.errors.root?.message}</FormMessage>
+        {isPending ? (
+          <LoadingButton className="w-full" />
+        ) : (
+          <Button className="w-full">Register</Button>
+        )}
       </form>
       <LoginProviderButtons />
     </Form>
