@@ -140,6 +140,6 @@
 
 @layer components {
   .authFormWrapper {
-    @apply w-full max-w-md space-y-8
+    @apply w-full max-w-md space-y-4
   }
 }
