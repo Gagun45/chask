@@ -43,7 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       await prisma.user.update({
-        where: { email: profile.email!, emailVerified: null },
+        where: { email: profile.email! },
         data: updateData,
       });
     },

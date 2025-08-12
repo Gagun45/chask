@@ -6,6 +6,8 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar/app-sidebar";
+import AuthDataLoader from "@/components/AuthDataLoader/AuthDataLoader";
+import ReduxAppProvider from "@/redux/ReduxAppProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,16 +34,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <SessionProvider>
-            <AppSidebar />
-            <div className="grow">
-              <Navbar />
-              {children}
-            </div>
-            <Toaster richColors />
-          </SessionProvider>
-        </SidebarProvider>
+        <ReduxAppProvider>
+          <SidebarProvider>
+            <SessionProvider>
+              <AuthDataLoader />
+              <AppSidebar />
+              <div className="grow">
+                <Navbar />
+                {children}
+              </div>
+              <Toaster richColors />
+            </SessionProvider>
+          </SidebarProvider>
+        </ReduxAppProvider>
       </body>
     </html>
   );
