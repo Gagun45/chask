@@ -36,11 +36,20 @@ model Account {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  email         String   @unique
+  email         String    @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  password      String? 
+  password      String?
   accounts      Account[]
+  teams         Team[]
 
   @@map("users")
+}
+
+model Team {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  creator     User    @relation(fields: [creatorId], references: [id])
+  creatorId   String
 }

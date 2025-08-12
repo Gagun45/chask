@@ -9,6 +9,12 @@ import type { Prisma } from "@prisma/client";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  callbacks: {
+    async session({ session, token }) {
+      if (token.sub) session.user.id = token.sub;
+      return session;
+    },
+  },
   events: {
     async createUser({ user }) {
       const hashedPassword = hashSync(uuid().slice(0, 16));
@@ -35,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!existingUser.name && profile.name) {
         updateData.name = profile.name;
       }
-      
+
       await prisma.user.update({
         where: { email: profile.email!, emailVerified: null },
         data: updateData,

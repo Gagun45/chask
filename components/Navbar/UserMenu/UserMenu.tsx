@@ -28,10 +28,6 @@ const UserMenu = () => {
       <DropdownMenuContent className="bg-second" side="bottom" align="center">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
         <DropdownMenuItem asChild>
