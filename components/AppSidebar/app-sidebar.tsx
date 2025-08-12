@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Sidebar,
@@ -8,9 +8,11 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import MyTeams from "./MyTeams/MyTeams";
 
 export function AppSidebar() {
   const { setOpenMobile } = useSidebar();
@@ -34,6 +36,9 @@ export function AppSidebar() {
             <SidebarMenuButton onClick={() => setOpenMobile(false)}>
               <Link href={"/teams/own"}>Own teams</Link>
             </SidebarMenuButton>
+            <SidebarMenuItem>
+              <MyTeams />
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
