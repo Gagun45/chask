@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+}
+
+;
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -142,8 +148,31 @@
   .authFormWrapper {
     @apply w-full max-w-md space-y-4
   }
+
   .authErrorFormMessage {
     @apply !text-lg font-semibold
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: red;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #94a3b8;
+    /* Tailwind slate-400 */
+    border-radius: 9999px;
+    /* Fully rounded */
+    border: 2px solid #f1f5f9;
+    /* Optional padding effect */
   }
 }
 
@@ -151,6 +180,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

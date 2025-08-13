@@ -11,6 +11,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { fetchMyTeams } from "@/redux/features/myTeams/myTeamsSlice";
+import type { AppDispatch } from "@/redux/store";
 import { createNewTeam } from "@/utils/actions/team.actions";
 import type { newTeamFormData } from "@/utils/types";
 import { newTeamFormSchema } from "@/utils/zod/zod-schemas";
@@ -18,10 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 const TeamCreateForm = () => {
   const [isPending, startTransition] = useTransition();
+  const dispatch = useDispatch<AppDispatch>();
   const form = useForm<newTeamFormData>({
     resolver: zodResolver(newTeamFormSchema),
     defaultValues: {
@@ -39,6 +43,7 @@ const TeamCreateForm = () => {
       }
       if (res.success) {
         toast.success("Team created");
+        dispatch(fetchMyTeams());
         redirect("/");
       }
     });

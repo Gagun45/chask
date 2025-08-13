@@ -8,9 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DropdownMenuCheckboxItem } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LogOutIcon } from "lucide-react";
 
 const UserMenu = () => {
   const { data } = useSession();

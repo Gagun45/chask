@@ -20,13 +20,24 @@ const initialState: MyTeamsState = {
 };
 
 export const fetchMyTeams = createAsyncThunk("myTeams/fetch", async () => {
-  return await getMyTeams();
+  const teams = await getMyTeams();
+  const serTeams = teams.map((team) => ({
+    ...team,
+    creator: {
+      ...team.creator,
+      emailVerified: team.creator.emailVerified?.toISOString() ?? null,
+    },
+  }));
+  return serTeams;
 });
 
 export const myTeamsSlice = createSlice({
   name: "myTeams",
   initialState,
   reducers: {
+    leaveTeam: (state, action: PayloadAction<string>) => {
+      state.teams = state.teams.filter((team) => team.id !== action.payload);
+    },
     clearTeams: (state) => {
       state.teams = [];
     },
@@ -49,6 +60,6 @@ export const myTeamsSlice = createSlice({
 export const selectMyTeamsAll = (state: RootState) => state.myTeams.teams;
 export const selectMyTeamsStatus = (state: RootState) => state.myTeams.status;
 
-export const { clearTeams } = myTeamsSlice.actions;
+export const { clearTeams, leaveTeam } = myTeamsSlice.actions;
 
 export default myTeamsSlice.reducer;
