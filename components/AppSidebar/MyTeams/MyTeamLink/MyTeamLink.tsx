@@ -13,7 +13,7 @@ const MyTeamLink = ({ team }: Props) => {
     <SidebarMenuButton onClick={() => setOpenMobile(false)} asChild>
       <Link
         key={team.id}
-        href={`/teams/team/${team.name.replaceAll(" ", "")}`}
+        href={`/teams/team/${team.pid}`}
         className="flex w-full h-16 px-4 items-center gap-2 rounded-md"
       >
         <div className="relative size-12 rounded-full overflow-hidden shrink-0">

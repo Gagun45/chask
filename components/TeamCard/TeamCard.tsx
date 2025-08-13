@@ -1,13 +1,11 @@
 "use client";
 
-import type { Prisma } from "@prisma/client";
 import Image from "next/image";
 import TeamMembershipButton from "./TeamMembershipButton/TeamMembershipButton";
+import type { TeamWithCreatorAndCountMembers } from "@/utils/types";
 
 interface Props {
-  team: Prisma.TeamGetPayload<{
-    include: { creator: true; _count: { select: { members: true } } };
-  }>;
+  team: TeamWithCreatorAndCountMembers;
   isMember?: boolean | undefined;
 }
 

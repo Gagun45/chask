@@ -13,3 +13,8 @@ export type newTeamFormData = z.infer<typeof newTeamFormSchema>;
 export type TeamWithCreatorAndCountMembers = Prisma.TeamGetPayload<{
   include: { creator: true; _count: { select: { members: true } } };
 }>;
+
+export const includeData = {
+  creator: true,
+  _count: { select: { members: true } },
+};

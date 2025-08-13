@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { joinATeam } from "@/utils/actions/team.actions"
+import { fetchMyTeams } from "@/redux/features/myTeams/myTeamsSlice";
+import type { AppDispatch } from "@/redux/store";
+import { joinATeam } from "@/utils/actions/team.actions";
 import { redirect } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 interface Props {
@@ -8,6 +11,7 @@ interface Props {
 }
 
 const JoinButton = ({ teamId }: Props) => {
+  const dispatch = useDispatch<AppDispatch>();
   const onJoin = async () => {
     const res = await joinATeam(teamId);
     if (res.error) {
@@ -16,7 +20,8 @@ const JoinButton = ({ teamId }: Props) => {
     }
     if (res.success) {
       toast.success(res.success);
-      redirect(`/teams/team/${res.teamName}`);
+      dispatch(fetchMyTeams());
+      redirect(`/teams/team/${res.teamPid}`);
     }
   };
   return <Button onClick={onJoin}>Join</Button>;

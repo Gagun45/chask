@@ -1,7 +1,11 @@
 "use server";
 
 import { safeParse } from "zod";
-import type { newTeamFormData, TeamWithCreatorAndCountMembers } from "../types";
+import {
+  includeData,
+  type newTeamFormData,
+  type TeamWithCreatorAndCountMembers,
+} from "../types";
 import { newTeamFormSchema } from "../zod/zod-schemas";
 import { smthWentWrong } from "@/config/helper";
 import { prisma } from "@/prisma/prisma";
@@ -70,7 +74,7 @@ export const joinATeam = async (teamId: string) => {
     const teamMembers = existingTeam.members.map((member) => member.userId);
     if (teamMembers.includes(userId)) return { error: "Already a member" };
     await prisma.teamMember.create({ data: { teamId, userId } });
-    return { success: "Joined a team", teamName: existingTeam.name };
+    return { success: "Joined a team", teamPid: existingTeam.pid };
   } catch (error) {
     console.log("Join a team error: ", error);
     return { ...smthWentWrong };
@@ -102,5 +106,18 @@ export const leaveATeam = async (teamId: string) => {
   } catch (error) {
     console.log("Leave a team error: ", error);
     return { ...smthWentWrong };
+  }
+};
+
+export const getTeamByPid = async (teamPid: string) => {
+  try {
+    const team = await prisma.team.findUniqueOrThrow({
+      where: { pid: teamPid },
+      include: includeData,
+    });
+    return team;
+  } catch (error) {
+    console.log("Get team byt pid error: ", error);
+    return null
   }
 };
