@@ -117,7 +117,39 @@ export const getTeamByPid = async (teamPid: string) => {
     });
     return team;
   } catch (error) {
-    console.log("Get team byt pid error: ", error);
-    return null
+    console.log("Get team by pid error: ", error);
+    return null;
+  }
+};
+
+export const getTeamWithMessagesByPid = async (teamPid: string) => {
+  try {
+    const team = await prisma.team.findUniqueOrThrow({
+      where: { pid: teamPid },
+      include: { TeamMessage: { include: { sender: true } } },
+    });
+    return team;
+  } catch (error) {
+    console.log("Get team by pid error: ", error);
+    return null;
+  }
+};
+
+export const sendTeamMessage = async (teamPid: string, message: string) => {
+  try {
+    const userId = await getUserId();
+    const team = await prisma.team.findUniqueOrThrow({
+      where: { pid: teamPid },
+      include: { members: true },
+    });
+    if (!team.members.some((member) => member.userId === userId))
+      return { error: "Access denied" };
+    await prisma.teamMessage.create({
+      data: { message, senderId: userId, teamId: team.id },
+    });
+    return { success: "Message sent" };
+  } catch (error) {
+    console.log("Send team message error: ", error);
+    return { ...smthWentWrong };
   }
 };

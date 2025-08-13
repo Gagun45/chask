@@ -1,5 +1,6 @@
 import type { RootState } from "@/redux/store";
 import { getMyTeams } from "@/utils/actions/team.actions";
+import type { StatusType } from "@/utils/types";
 import type { Team } from "@prisma/client";
 import {
   createAsyncThunk,
@@ -7,7 +8,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 
-type StatusType = "idle" | "loading" | "succeeded" | "failed";
+
 
 interface MyTeamsState {
   teams: Team[];

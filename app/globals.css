@@ -154,7 +154,11 @@
   }
 
   .teamPageTabsContent {
-    @apply bg-yellow-200
+    @apply p-2 rounded-md h-128 border-2 border-first
+  }
+
+  .custom-scrollbar {
+    @apply scrollbar scrollbar-thumb-second scrollbar-hover:bg-first scrollbar-w-2 scrollbar-thumb-rounded-full
   }
 }
 

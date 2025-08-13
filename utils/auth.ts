@@ -20,7 +20,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const hashedPassword = hashSync(uuid().slice(0, 16));
       await prisma.user.update({
         where: { email: user.email! },
-        data: { password: hashedPassword },
+        data: {
+          password: hashedPassword,
+        },
       });
     },
     async linkAccount({ profile }) {
@@ -40,6 +42,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       if (!existingUser.name && profile.name) {
         updateData.name = profile.name;
+      }
+
+      if (existingUser.username === "Unknown") {
+        updateData.username = profile.email?.split("@")[0];
       }
 
       await prisma.user.update({

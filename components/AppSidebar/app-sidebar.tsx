@@ -40,7 +40,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarSeparator />
-        <SidebarGroup className="scrollbar overflow-y-scroll scrollbar-thumb-second scrollbar-hover:bg-first scrollbar-w-1.5 scrollbar-thumb-rounded-full">
+        <SidebarGroup className="overflow-y-auto custom-scrollbar">
           <SidebarMenu className="items-center gap-2">
             <MyTeamsRedux />
           </SidebarMenu>

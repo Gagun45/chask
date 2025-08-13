@@ -29,6 +29,7 @@ const RegisterForm = () => {
       email: "",
       password: "",
       name: "",
+      username: "",
     },
   });
 
@@ -78,6 +79,20 @@ const RegisterForm = () => {
 
         <FormField
           control={form.control}
+          name='username'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="John Doe" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -91,6 +106,8 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
+
+        
         <FormMessage className="authErrorFormMessage">
           {form.formState.errors.root?.message}
         </FormMessage>
