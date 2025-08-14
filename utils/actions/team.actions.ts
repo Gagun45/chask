@@ -144,10 +144,18 @@ export const sendTeamMessage = async (teamPid: string, message: string) => {
     });
     if (!team.members.some((member) => member.userId === userId))
       return { error: "Access denied" };
-    await prisma.teamMessage.create({
+    const newMessage = await prisma.teamMessage.create({
       data: { message, senderId: userId, teamId: team.id },
+      include: { sender: true },
     });
-    return { success: "Message sent" };
+    return {
+      data: {
+        message,
+        id: newMessage.id,
+        senderId: newMessage.senderId,
+        senderUsername: newMessage.sender.username,
+      },
+    };
   } catch (error) {
     console.log("Send team message error: ", error);
     return { ...smthWentWrong };

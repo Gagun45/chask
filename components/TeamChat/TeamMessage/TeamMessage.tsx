@@ -9,15 +9,16 @@ interface Props {
 }
 
 const TeamMessage = ({ message, senderId, senderUsername }: Props) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
   const isMyMessage = data?.user?.id === senderId;
+  if (status === "loading") return <></>;
   return (
     <div
-      className={`flex max-w-4/5 gap-2 ${isMyMessage ? "" : "ml-auto flex-row-reverse"}`}
+      className={`flex max-w-4/5 gap-2 ${
+        isMyMessage ? "" : "ml-auto flex-row-reverse"
+      }`}
     >
-      <span className="font-bold">
-        {senderUsername}
-      </span>
+      <span className="font-bold">{senderUsername}</span>
       <span>{message}</span>
     </div>
   );
