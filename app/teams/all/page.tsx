@@ -3,6 +3,7 @@ import { prisma } from "@/prisma/prisma";
 import { getUserId } from "@/utils/actions/helper";
 
 const AllTeams = async () => {
+  
   const userId = await getUserId();
   const allTeams = await prisma.team.findMany({
     include: {

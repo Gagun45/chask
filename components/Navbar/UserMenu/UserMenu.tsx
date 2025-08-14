@@ -31,7 +31,9 @@ const UserMenu = () => {
         <DropdownMenuItem asChild>
           <Button
             variant={"destructive"}
-            onClick={() => signOut({ redirect: false })}
+            onClick={() => {
+              signOut({ redirectTo: "/" });
+            }}
             className="mx-auto"
           >
             Logout
