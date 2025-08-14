@@ -1,12 +1,10 @@
-import type { TeamMessageInterface } from "@/redux/features/currentTeamMessages/currentTeamMessagesSlice";
+import { selectTeamMessagesAllMessages } from "@/redux/features/currentTeamMessages/currentTeamMessagesSlice";
 import TeamMessage from "../TeamMessage/TeamMessage";
 import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
-interface Props {
-  messages: TeamMessageInterface[];
-}
-
-const MessagesContainer = ({ messages }: Props) => {
+const MessagesContainer = () => {
+  const messages = useSelector(selectTeamMessagesAllMessages).toReversed();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
     if (containerRef.current) {
@@ -27,7 +25,8 @@ const MessagesContainer = ({ messages }: Props) => {
           message={message.message}
           senderId={message.senderId}
           senderUsername={message.senderUsername}
-          messageId={message.id}
+          id={message.id}
+          createdAt={message.createdAt}
         />
       ))}
     </div>

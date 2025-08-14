@@ -8,8 +8,6 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 
-
-
 interface MyTeamsState {
   teams: Team[];
   status: StatusType;

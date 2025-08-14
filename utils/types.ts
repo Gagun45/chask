@@ -16,6 +16,10 @@ export type teamWithMessages = Prisma.TeamGetPayload<{
   include: { TeamMessage: { include: { sender: true } } };
 }>;
 
+export type TeamMessageWithSender = Prisma.TeamMessageGetPayload<{
+  include: { sender: true };
+}>;
+
 export type TeamWithCreatorAndCountMembers = Prisma.TeamGetPayload<{
   include: { creator: true; _count: { select: { members: true } } };
 }>;

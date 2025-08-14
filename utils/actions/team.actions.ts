@@ -124,27 +124,64 @@ export const getTeamByPid = async (teamPid: string) => {
 
 export const getTeamWithMessagesByPid = async (teamPid: string) => {
   try {
+    const userId = await getUserId();
     const team = await prisma.team.findUniqueOrThrow({
-      where: { pid: teamPid },
+      where: { pid: teamPid, members: { some: { userId } } },
       include: {
         TeamMessage: {
           include: { sender: true },
           where: { softDeleted: false },
+          orderBy: { createdAt: "desc" },
+          take: 5,
         },
       },
     });
-    return team;
+    const messagesLeft = await prisma.teamMessage.count({
+      where: { teamId: team.id, softDeleted: false },
+    });
+    return {
+      data: { team, messagesLeft: messagesLeft - team.TeamMessage.length },
+    };
   } catch (error) {
     console.log("Get team by pid error: ", error);
     return null;
   }
 };
 
-export const sendTeamMessage = async (teamPid: string, message: string) => {
+export const loadMoreTeamMessages = async (
+  teamId: string,
+  lastMessageDateTime: Date
+) => {
+  try {
+    const messages = await prisma.teamMessage.findMany({
+      where: {
+        teamId,
+        softDeleted: false,
+        createdAt: { lt: lastMessageDateTime },
+      },
+      include: { sender: true },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    });
+    const messagesLeft = await prisma.teamMessage.count({
+      where: {
+        teamId,
+        softDeleted: false,
+        createdAt: { lt: lastMessageDateTime },
+      },
+    });
+    return { data: { messages, messagesLeft: messagesLeft - messages.length } };
+  } catch (error) {
+    console.log("Load more team messages error: ", error);
+    return null;
+  }
+};
+
+export const sendTeamMessage = async (teamId: string, message: string) => {
   try {
     const userId = await getUserId();
     const team = await prisma.team.findUniqueOrThrow({
-      where: { pid: teamPid },
+      where: { id: teamId },
       include: { members: true },
     });
     if (!team.members.some((member) => member.userId === userId))
@@ -159,6 +196,7 @@ export const sendTeamMessage = async (teamPid: string, message: string) => {
         id: newMessage.id,
         senderId: newMessage.senderId,
         senderUsername: newMessage.sender.username,
+        createdAt: newMessage.createdAt.toISOString(),
       },
     };
   } catch (error) {
