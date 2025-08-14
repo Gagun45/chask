@@ -55,12 +55,13 @@ model User {
 }
 
 model TeamMessage {
-  id       String @id @default(cuid())
-  message  String
-  team     Team   @relation(fields: [teamId], references: [id])
-  teamId   String
-  sender   User   @relation(fields: [senderId], references: [id])
-  senderId String
+  id          String  @id @default(cuid())
+  message     String
+  team        Team    @relation(fields: [teamId], references: [id])
+  teamId      String
+  sender      User    @relation(fields: [senderId], references: [id])
+  senderId    String
+  softDeleted Boolean @default(false)
 }
 
 model Team {

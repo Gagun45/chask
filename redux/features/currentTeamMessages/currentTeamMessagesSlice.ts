@@ -29,12 +29,17 @@ export const currentTeamMessagesSlice = createSlice({
     addMessage: (state, action: PayloadAction<TeamMessageInterface>) => {
       state.messages.push(action.payload);
     },
+    deleteMessage: (state, action: PayloadAction<string>) => {
+      state.messages = state.messages.filter(
+        (message) => message.id !== action.payload
+      );
+    },
   },
 });
 
 export const selectTeamMessagesAllMessages = (state: RootState) =>
   state.currentTeamMessages.messages;
 
-export const { addMessage, setInitialMessages } =
+export const { addMessage, setInitialMessages, deleteMessage } =
   currentTeamMessagesSlice.actions;
 export default currentTeamMessagesSlice.reducer;

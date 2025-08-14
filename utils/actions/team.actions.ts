@@ -126,7 +126,12 @@ export const getTeamWithMessagesByPid = async (teamPid: string) => {
   try {
     const team = await prisma.team.findUniqueOrThrow({
       where: { pid: teamPid },
-      include: { TeamMessage: { include: { sender: true } } },
+      include: {
+        TeamMessage: {
+          include: { sender: true },
+          where: { softDeleted: false },
+        },
+      },
     });
     return team;
   } catch (error) {
@@ -158,6 +163,24 @@ export const sendTeamMessage = async (teamPid: string, message: string) => {
     };
   } catch (error) {
     console.log("Send team message error: ", error);
+    return { ...smthWentWrong };
+  }
+};
+
+export const deleteTeamMessage = async (messageId: string) => {
+  try {
+    const userId = await getUserId();
+    const existingMessage = await prisma.teamMessage.update({
+      where: { id: messageId, senderId: userId, softDeleted: false },
+      data: { softDeleted: true },
+    });
+    if (!existingMessage)
+      return {
+        error: "Message not found, message already deleted or access denied",
+      };
+    return { success: "Message deleted" };
+  } catch (error) {
+    console.log("Delete team message error: ", error);
     return { ...smthWentWrong };
   }
 };

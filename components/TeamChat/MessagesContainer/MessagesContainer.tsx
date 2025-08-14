@@ -27,6 +27,7 @@ const MessagesContainer = ({ messages }: Props) => {
           message={message.message}
           senderId={message.senderId}
           senderUsername={message.senderUsername}
+          messageId={message.id}
         />
       ))}
     </div>
