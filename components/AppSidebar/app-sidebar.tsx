@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import MyTeamsRedux from "./MyTeams/MyTeamsRedux";
+import { PlusCircleIcon } from "lucide-react";
 
 export function AppSidebar() {
   const { setOpenMobile } = useSidebar();
@@ -45,7 +46,21 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-first h-24">FOOTER</SidebarFooter>
+      <SidebarFooter className="bg-first h-24 justify-center">
+        <SidebarMenuButton onClick={() => setOpenMobile(false)} asChild>
+          <Link
+            href={`/teams/create`}
+            className="flex w-full h-16 px-4 items-center group gap-2 rounded-md"
+          >
+            <div className="flex items-center justify-center size-12 rounded-full shrink-0">
+              <PlusCircleIcon className="size-4/5 group-hover:scale-120 duration-300" />
+            </div>
+            <span className="line-clamp-1 text-lg font-semibold">
+              Create a team
+            </span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarFooter>
     </Sidebar>
   );
 }

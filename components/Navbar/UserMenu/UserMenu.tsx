@@ -24,7 +24,7 @@ const UserMenu = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-second" side="bottom" align="center">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>{data?.user.username}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
