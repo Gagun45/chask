@@ -75,6 +75,29 @@ model Team {
   creatorId   String
   members     TeamMember[]
   TeamMessage TeamMessage[]
+  TeamColumn  TeamColumn[]
+  TeamTask    TeamTask[]
+}
+
+model TeamColumn {
+  id       String     @id @default(cuid())
+  pid      Int        @unique
+  title    String
+  team     Team       @relation(fields: [teamId], references: [id])
+  teamId   String
+  TeamTask TeamTask[]
+
+  @@unique([pid, teamId])
+}
+
+model TeamTask {
+  id            String     @id @default(cuid())
+  pid           Int        @unique
+  content       String
+  column        TeamColumn @relation(fields: [teamColumnPid, teamId], references: [pid, teamId], onDelete: Cascade)
+  teamColumnPid Int
+  teamId        String
+  Team          Team       @relation(fields: [teamId], references: [id])
 }
 
 model TeamMember {

@@ -10,6 +10,10 @@ import { newTeamFormSchema } from "../zod/zod-schemas";
 import { smthWentWrong } from "@/config/helper";
 import { prisma } from "@/prisma/prisma";
 import { getUserId } from "./helper";
+import type {
+  TeamTaskColumn,
+  TeamTaskSingle,
+} from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 
 export const createNewTeam = async (values: newTeamFormData) => {
   try {
@@ -134,6 +138,8 @@ export const getTeamWithMessagesByPid = async (teamPid: string) => {
           orderBy: { createdAt: "desc" },
           take: 5,
         },
+        TeamColumn: true,
+        TeamTask: true,
       },
     });
     const messagesLeft = await prisma.teamMessage.count({
@@ -219,6 +225,67 @@ export const deleteTeamMessage = async (messageId: string) => {
     return { success: "Message deleted" };
   } catch (error) {
     console.log("Delete team message error: ", error);
+    return { ...smthWentWrong };
+  }
+};
+
+export const saveTeamTasks = async (
+  columns: TeamTaskColumn[],
+  tasks: TeamTaskSingle[],
+  teamId: string
+) => {
+  console.log("columns: ", columns);
+  console.log("tasks: ", tasks);
+  try {
+    const existingCols = await prisma.teamColumn.findMany({
+      where: { teamId },
+    });
+    const existingColsPids = existingCols.map((col) => col.pid);
+    const newColsPids = columns.map((col) => col.pid);
+
+    const deleteColsQuery = prisma.teamColumn.deleteMany({
+      where: { teamId, pid: { notIn: newColsPids } },
+    });
+    const createColsQuery = columns
+      .filter((col) => !existingColsPids.includes(col.pid))
+      .map((c) =>
+        prisma.teamColumn.create({
+          data: { pid: c.pid, title: c.title, teamId: c.teamId },
+        })
+      );
+
+    const existingTasks = await prisma.teamTask.findMany({
+      where: { teamId },
+    });
+    const existingTasksPids = existingTasks.map((task) => task.pid);
+    const newTasksPids = tasks.map((task) => task.pid);
+
+    const deleteTasksQuery = prisma.teamTask.deleteMany({
+      where: { teamId, pid: { notIn: newTasksPids } },
+    });
+    const createTasksQuery = tasks
+      .filter((task) => !existingTasksPids.includes(task.pid))
+      .map((t) =>
+        prisma.teamTask.create({
+          data: {
+            content: t.content,
+            pid: t.pid,
+            teamColumnPid: t.teamColumnPid,
+            teamId,
+          },
+        })
+      );
+
+    await prisma.$transaction([
+      deleteColsQuery,
+      ...createColsQuery,
+      deleteTasksQuery,
+      ...createTasksQuery,
+    ]);
+
+    return { success: "Cols and Tasks saved" };
+  } catch (error) {
+    console.log("Save team tasks error: ", error);
     return { ...smthWentWrong };
   }
 };

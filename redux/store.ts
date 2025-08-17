@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import myTeamsReducer from "./features/myTeams/myTeamsSlice";
-import currentTeamReducer from "./features/currentTeamMessages/currentTeamMessagesSlice";
+import currentTeamMessagesReducer from "./features/currentTeamMessages/currentTeamMessagesSlice";
+import currentTeamTasksReducer from "./features/currentTeamTasks/currentTeamTasksSlice";
 
 export const store = configureStore({
   reducer: {
     myTeams: myTeamsReducer,
-    currentTeamMessages: currentTeamReducer,
+    currentTeamMessages: currentTeamMessagesReducer,
+    currentTeamTasks: currentTeamTasksReducer,
   },
 });
 

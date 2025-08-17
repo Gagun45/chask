@@ -13,7 +13,11 @@ export type newTeamFormData = z.infer<typeof newTeamFormSchema>;
 export type StatusType = "idle" | "loading" | "succeeded" | "failed";
 
 export type teamWithMessages = Prisma.TeamGetPayload<{
-  include: { TeamMessage: { include: { sender: true } } };
+  include: {
+    TeamMessage: { include: { sender: true } };
+    TeamColumn: true;
+    TeamTask: true;
+  };
 }>;
 
 export type TeamMessageWithSender = Prisma.TeamMessageGetPayload<{

@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
 import { setInitialMessages } from "@/redux/features/currentTeamMessages/currentTeamMessagesSlice";
 import { formatMessages } from "@/utils/actions/helper";
-import TaskTab from "../TaskTab/TaskTab";
+import TeamTasks from "../TeamTasks/TeamTasks";
+import { setInitialTasks } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 
 interface Props {
   team: teamWithMessages;
@@ -27,6 +28,9 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
         teamId: team.id,
       })
     );
+    dispatch(
+      setInitialTasks({ columns: team.TeamColumn, tasks: team.TeamTask })
+    );
   }, [team, messagesLeft, dispatch]);
   return (
     <Tabs defaultValue="tasks" className="w-9/10">
@@ -38,7 +42,7 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
         <TeamChat />
       </TabsContent>
       <TabsContent value="tasks" className="teamPageTabsContent">
-        <TaskTab />
+        <TeamTasks />
       </TabsContent>
     </Tabs>
   );

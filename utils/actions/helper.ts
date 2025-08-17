@@ -20,3 +20,7 @@ export const formatMessages = (
     senderUsername: message.sender.username,
   }));
 };
+
+export const generateIntPid = () => {
+  return Math.floor(Math.random() * 10000);
+};
