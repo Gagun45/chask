@@ -1,5 +1,9 @@
 import type { RootState } from "@/redux/store";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 
 export interface TeamTaskSingle {
   pid: number;
@@ -36,6 +40,12 @@ export const currentTeamTasksSlice = createSlice({
       state.columns = action.payload.columns;
       state.tasks = action.payload.tasks;
     },
+    setColumns: (
+      state,
+      action: PayloadAction<{ columns: TeamTaskColumn[] }>
+    ) => {
+      state.columns = action.payload.columns;
+    },
     addNewColumn: (state, action: PayloadAction<TeamTaskColumn>) => {
       state.columns.push(action.payload);
     },
@@ -58,10 +68,15 @@ export const currentTeamTasksSlice = createSlice({
   },
 });
 
-export const selectTeamTasksColumns = (state: RootState) =>
-  state.currentTeamTasks.columns;
-export const selectTeamTasksTasks = (state: RootState) =>
-  state.currentTeamTasks.tasks;
+export const selectTeamTasksColumns = createSelector(
+  (state: RootState) => state.currentTeamTasks.columns,
+  (columns) => columns
+);
+
+export const selectTeamTasksTasks = createSelector(
+  (state: RootState) => state.currentTeamTasks.tasks,
+  (tasks) => tasks
+);
 
 export const {
   addNewColumn,
@@ -69,5 +84,6 @@ export const {
   setInitialTasks,
   addNewTask,
   deleteTask,
+  setColumns,
 } = currentTeamTasksSlice.actions;
 export default currentTeamTasksSlice.reducer;
