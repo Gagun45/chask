@@ -46,7 +46,7 @@ const TaskCard = ({ task }: Props) => {
 
   return (
     <div
-      className="w-36 h-12 flex justify-between items-center bg-blue-700 rounded-md"
+      className="w-full h-fit flex justify-between items-center bg-blue-700 rounded-md"
       style={style}
       ref={setNodeRef}
     >

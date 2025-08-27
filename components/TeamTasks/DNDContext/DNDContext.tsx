@@ -110,7 +110,7 @@ const DNDContext = () => {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <div className="flex bg-green-300 h-full gap-2">
+      <div className="flex flex-wrap overflow-auto h-full gap-2">
         <SortableContext items={columnsIds}>
           {columns.map((col) => (
             <Column

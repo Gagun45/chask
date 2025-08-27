@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TaskCard from "./TaskCard/TaskCard";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import ColumnTitleInput from "./ColumnTitleInput";
 
 interface Props {
   column: TeamTaskColumn;
@@ -79,22 +80,23 @@ const Column = ({ column, tasks }: Props) => {
     );
   return (
     <div
-      className="h-full flex flex-col w-42 bg-blue-300"
+      className="h-96 p-2 rounded-md flex flex-col w-64 bg-blue-300"
       style={style}
       ref={setNodeRef}
     >
-      <div className="flex justify-between">
-        <span {...attributes} {...listeners}>
-          {column.title}
-        </span>
-        <Button onClick={onCreateNewTask}>New</Button>
+      <div className="flex justify-between items-center">
+        <ColumnTitleInput column={column} />
+        <Button onClick={onCreateNewTask}>Add Task</Button>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-auto">
         <SortableContext items={tasksPids}>
           {tasks.map((task) => (
             <TaskCard task={task} key={task.pid} />
           ))}
         </SortableContext>
+      </div>
+      <div {...attributes} {...listeners}>
+        MOVE
       </div>
       <Button onClick={onDeleteColumn} className="mt-auto">
         Delete column

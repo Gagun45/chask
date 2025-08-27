@@ -154,7 +154,7 @@
   }
 
   .teamPageTabsContent {
-    @apply p-2 rounded-md h-128 border-2 border-first
+    @apply p-2 rounded-md h-144 border-2 border-first
   }
 
   .custom-scrollbar {

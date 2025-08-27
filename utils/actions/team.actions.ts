@@ -239,10 +239,11 @@ export const saveTeamTasks = async (
       where: { teamId },
     });
     const updateColsQuery = existingCols.map((col) => {
+      const newTitle = columns.find((c) => c.pid === col.pid)?.title;
       const index = columns.findIndex((c) => c.pid === col.pid);
       return prisma.teamColumn.update({
         where: { pid: col.pid },
-        data: { orderNumber: index },
+        data: { orderNumber: index, title: newTitle },
       });
     });
     const existingColsPids = existingCols.map((col) => col.pid);
