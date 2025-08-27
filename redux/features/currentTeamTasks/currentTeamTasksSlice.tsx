@@ -46,6 +46,9 @@ export const currentTeamTasksSlice = createSlice({
     ) => {
       state.columns = action.payload.columns;
     },
+    setTasks: (state, action: PayloadAction<{ tasks: TeamTaskSingle[] }>) => {
+      state.tasks = action.payload.tasks;
+    },
     addNewColumn: (state, action: PayloadAction<TeamTaskColumn>) => {
       state.columns.push(action.payload);
     },
@@ -85,5 +88,6 @@ export const {
   addNewTask,
   deleteTask,
   setColumns,
+  setTasks,
 } = currentTeamTasksSlice.actions;
 export default currentTeamTasksSlice.reducer;

@@ -10,7 +10,7 @@ import type { AppDispatch } from "@/redux/store";
 import { generateIntPid } from "@/utils/actions/helper";
 import { useDispatch, useSelector } from "react-redux";
 import TaskCard from "./TaskCard/TaskCard";
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
@@ -21,6 +21,7 @@ interface Props {
 const Column = ({ column, tasks }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentTeamId = useSelector(selectCurrentTeamId);
+  const tasksPids = tasks.map((task) => task.pid);
   const onDeleteColumn = () => {
     dispatch(deleteColumn({ columnPid: column.pid }));
   };
@@ -65,9 +66,11 @@ const Column = ({ column, tasks }: Props) => {
           <Button onClick={onCreateNewTask}>New</Button>
         </div>
         <div className="flex flex-col gap-2">
-          {tasks.map((task) => (
-            <TaskCard task={task} key={task.pid} />
-          ))}
+          <SortableContext items={tasksPids}>
+            {tasks.map((task) => (
+              <TaskCard task={task} key={task.pid} />
+            ))}
+          </SortableContext>
         </div>
         <Button onClick={onDeleteColumn} className="mt-auto">
           Delete column
@@ -87,9 +90,11 @@ const Column = ({ column, tasks }: Props) => {
         <Button onClick={onCreateNewTask}>New</Button>
       </div>
       <div className="flex flex-col gap-2">
-        {tasks.map((task) => (
-          <TaskCard task={task} key={task.pid} />
-        ))}
+        <SortableContext items={tasksPids}>
+          {tasks.map((task) => (
+            <TaskCard task={task} key={task.pid} />
+          ))}
+        </SortableContext>
       </div>
       <Button onClick={onDeleteColumn} className="mt-auto">
         Delete column

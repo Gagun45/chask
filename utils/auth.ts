@@ -18,7 +18,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token, user }) {
       if (user) {
-        token.username = user.username;
+        token.username =
+          user.username === "Unknown"
+            ? user.email?.split("@")[0]
+            : user.username;
       }
       return token;
     },
@@ -30,6 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         where: { email: user.email! },
         data: {
           password: hashedPassword,
+          username: user.email?.split("@")[0],
         },
       });
     },

@@ -234,11 +234,16 @@ export const saveTeamTasks = async (
   tasks: TeamTaskSingle[],
   teamId: string
 ) => {
-  console.log("columns: ", columns);
-  console.log("tasks: ", tasks);
   try {
     const existingCols = await prisma.teamColumn.findMany({
       where: { teamId },
+    });
+    const updateColsQuery = existingCols.map((col) => {
+      const index = columns.findIndex((c) => c.pid === col.pid);
+      return prisma.teamColumn.update({
+        where: { pid: col.pid },
+        data: { orderNumber: index },
+      });
     });
     const existingColsPids = existingCols.map((col) => col.pid);
     const newColsPids = columns.map((col) => col.pid);
@@ -246,13 +251,20 @@ export const saveTeamTasks = async (
     const deleteColsQuery = prisma.teamColumn.deleteMany({
       where: { teamId, pid: { notIn: newColsPids } },
     });
+
     const createColsQuery = columns
       .filter((col) => !existingColsPids.includes(col.pid))
-      .map((c) =>
-        prisma.teamColumn.create({
-          data: { pid: c.pid, title: c.title, teamId: c.teamId },
-        })
-      );
+      .map((c) => {
+        const index = columns.findIndex((col) => col.pid === c.pid);
+        return prisma.teamColumn.create({
+          data: {
+            pid: c.pid,
+            title: c.title,
+            teamId: c.teamId,
+            orderNumber: index,
+          },
+        });
+      });
 
     const existingTasks = await prisma.teamTask.findMany({
       where: { teamId },
@@ -263,24 +275,48 @@ export const saveTeamTasks = async (
     const deleteTasksQuery = prisma.teamTask.deleteMany({
       where: { teamId, pid: { notIn: newTasksPids } },
     });
+    const updateTasksQuery = existingTasks
+      .filter((ta) => newTasksPids.includes(ta.pid))
+      .map((task) => {
+        const filteredTask = tasks.find(
+          (filterTask) => filterTask.pid === task.pid
+        );
+        const index = tasks
+          .filter((t) => t.teamColumnPid === task.teamColumnPid)
+          .findIndex((t) => t.pid === filteredTask!.pid);
+
+        const newTeamColumnId = tasks.find(
+          (t) => t.pid === task.pid
+        )?.teamColumnPid;
+        return prisma.teamTask.update({
+          where: { pid: task.pid },
+          data: { teamColumnPid: newTeamColumnId, orderNumber: index },
+        });
+      });
     const createTasksQuery = tasks
       .filter((task) => !existingTasksPids.includes(task.pid))
-      .map((t) =>
-        prisma.teamTask.create({
+      .map((t) => {
+        const index = tasks
+          .filter((task) => task.teamColumnPid === t.teamColumnPid)
+          .findIndex((ta) => ta.pid === t.pid);
+        return prisma.teamTask.create({
           data: {
             content: t.content,
             pid: t.pid,
             teamColumnPid: t.teamColumnPid,
             teamId,
+            orderNumber: index,
           },
-        })
-      );
+        });
+      });
 
     await prisma.$transaction([
-      deleteColsQuery,
       ...createColsQuery,
-      deleteTasksQuery,
+      ...updateColsQuery,
       ...createTasksQuery,
+      ...updateTasksQuery,
+      deleteColsQuery,
+      deleteTasksQuery,
     ]);
 
     return { success: "Cols and Tasks saved" };
