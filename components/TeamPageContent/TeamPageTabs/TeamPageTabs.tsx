@@ -1,14 +1,14 @@
 "use client";
 
 import type { teamWithMessages } from "@/utils/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import TeamChat from "./TeamChat/TeamChat";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
 import { setInitialMessages } from "@/redux/features/currentTeamMessages/currentTeamMessagesSlice";
 import { formatMessages } from "@/utils/actions/helper";
-import TeamTasks from "../TeamTasks/TeamTasks";
+import TeamTasks from "./TeamTasks/TeamTasks";
 import { setInitialTasks } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 
 interface Props {

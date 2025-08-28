@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import TeamPageTabs from "../TeamPageTabs/TeamPageTabs";
+import TeamPageTabs from "./TeamPageTabs/TeamPageTabs";
 import {
   checkMembership,
   getTeamWithMessagesByPid,
