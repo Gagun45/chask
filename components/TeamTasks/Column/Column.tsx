@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { selectCurrentTeamId } from "@/redux/features/currentTeamMessages/currentTeamMessagesSlice";
 import {
   addNewTask,
@@ -13,6 +13,7 @@ import TaskCard from "./TaskCard/TaskCard";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import ColumnTitleInput from "./ColumnTitleInput";
+import { MoveIcon } from "lucide-react";
 
 interface Props {
   column: TeamTaskColumn;
@@ -56,35 +57,42 @@ const Column = ({ column, tasks }: Props) => {
   if (isDragging)
     return (
       <div
-        className="h-full flex flex-col w-42 bg-blue-300 border-1 border-red-500 opacity-30"
+        className="h-96 p-2 rounded-md border-1 border-red-500 opacity-40 flex flex-col gap-2 w-64 bg-first"
         style={style}
-        {...attributes}
-        {...listeners}
         ref={setNodeRef}
       >
-        <div className="flex justify-between">
-          <span>{column.title}</span>
-          <Button onClick={onCreateNewTask}>New</Button>
+        <div className="flex gap-2 justify-between items-center">
+          <ColumnTitleInput column={column} />
+          <Button onClick={onCreateNewTask}>Add Task</Button>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 overflow-auto">
           <SortableContext items={tasksPids}>
             {tasks.map((task) => (
               <TaskCard task={task} key={task.pid} />
             ))}
           </SortableContext>
         </div>
-        <Button onClick={onDeleteColumn} className="mt-auto">
-          Delete column
-        </Button>
+        <div className="flex justify-between gap-2 mt-auto">
+          <Button onClick={onDeleteColumn} className="mt-auto">
+            Delete column
+          </Button>
+          <span
+            className={buttonVariants({ variant: "default" })}
+            {...attributes}
+            {...listeners}
+          >
+            <MoveIcon />
+          </span>
+        </div>
       </div>
     );
   return (
     <div
-      className="h-96 p-2 rounded-md flex flex-col w-64 bg-blue-300"
+      className="h-96 p-2 rounded-md flex flex-col gap-2 w-64 bg-first"
       style={style}
       ref={setNodeRef}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex gap-2 justify-between items-center">
         <ColumnTitleInput column={column} />
         <Button onClick={onCreateNewTask}>Add Task</Button>
       </div>
@@ -95,12 +103,18 @@ const Column = ({ column, tasks }: Props) => {
           ))}
         </SortableContext>
       </div>
-      <div {...attributes} {...listeners}>
-        MOVE
+      <div className="flex justify-between gap-2 mt-auto">
+        <Button onClick={onDeleteColumn} className="mt-auto">
+          Delete column
+        </Button>
+        <span
+          className={buttonVariants({ variant: "default" })}
+          {...attributes}
+          {...listeners}
+        >
+          <MoveIcon />
+        </span>
       </div>
-      <Button onClick={onDeleteColumn} className="mt-auto">
-        Delete column
-      </Button>
     </div>
   );
 };

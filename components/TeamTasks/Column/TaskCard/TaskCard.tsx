@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   deleteTask,
+  updateTask,
   type TeamTaskSingle,
 } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 import type { AppDispatch } from "@/redux/store";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { EditIcon, MoveIcon, TrashIcon } from "lucide-react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 interface Props {
@@ -14,6 +17,8 @@ interface Props {
 
 const TaskCard = ({ task }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [content, setContent] = useState(task.content);
+  const [editMode, setEditMode] = useState(false);
   const onDeleteTask = () => {
     dispatch(deleteTask({ taskPid: task.pid }));
   };
@@ -24,36 +29,124 @@ const TaskCard = ({ task }: Props) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: task.pid, data: { type: "Task", task } });
+  } = useSortable({
+    id: task.pid,
+    data: { type: "Task", task },
+    disabled: editMode,
+  });
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
+  };
+  const editTaskContent = () => {
+    if (!content) {
+      setContent(task.content);
+      return;
+    }
+    dispatch(updateTask({ pid: task.pid, content }));
   };
 
   if (isDragging)
     return (
       <div
-        className="w-36 h-12 flex justify-between items-center bg-blue-700 rounded-md opacity-40 border-1 border-red-500"
+        className="w-full p-1 h-fit border-1 border-red-500 opacity-40 flex items-start bg-second rounded-md"
         style={style}
-        {...attributes}
-        {...listeners}
         ref={setNodeRef}
       >
-        <span>{task.content}</span>
-        <Button onClick={onDeleteTask}>Delete</Button>
+        <div className="flex size-full">
+          {editMode ? (
+            <textarea
+              className="break-words h-full"
+              autoFocus
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              onBlur={() => {
+                setContent(task.content);
+                setEditMode(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  setContent(task.content);
+                  setEditMode(false);
+                }
+                if (e.key === "Enter") {
+                  editTaskContent();
+                  setEditMode(false);
+                }
+              }}
+            />
+          ) : (
+            <span>{task.content}</span>
+          )}
+        </div>
+        <div className="flex ml-auto items-end flex-col gap-1 w-1/4">
+          <Button className="bg-destructive size-7" onClick={onDeleteTask}>
+            <TrashIcon />
+          </Button>
+          <Button
+            className="size-7"
+            onClick={() => setEditMode((prev) => !prev)}
+          >
+            <EditIcon />
+          </Button>
+          <span
+            className={`${buttonVariants({ variant: "default" })} !size-7`}
+            {...attributes}
+            {...listeners}
+          >
+            <MoveIcon />
+          </span>
+        </div>
       </div>
     );
 
   return (
     <div
-      className="w-full h-fit flex justify-between items-center bg-blue-700 rounded-md"
+      className="w-full p-1 h-fit flex items-start bg-second rounded-md"
       style={style}
       ref={setNodeRef}
     >
-      <span {...attributes} {...listeners}>
-        {task.content}
-      </span>
-      <Button onClick={onDeleteTask}>Delete</Button>
+      <div className="flex size-full">
+        {editMode ? (
+          <textarea
+            className="break-words h-full"
+            autoFocus
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            onBlur={() => {
+              setContent(task.content);
+              setEditMode(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setContent(task.content);
+                setEditMode(false);
+              }
+              if (e.key === "Enter") {
+                editTaskContent();
+                setEditMode(false);
+              }
+            }}
+          />
+        ) : (
+          <span>{task.content}</span>
+        )}
+      </div>
+      <div className="flex ml-auto items-end flex-col gap-1 w-1/4">
+        <Button className="bg-destructive size-7" onClick={onDeleteTask}>
+          <TrashIcon />
+        </Button>
+        <Button className="size-7" onClick={() => setEditMode((prev) => !prev)}>
+          <EditIcon />
+        </Button>
+        <span
+          className={`${buttonVariants({ variant: "default" })} !size-7`}
+          {...attributes}
+          {...listeners}
+        >
+          <MoveIcon />
+        </span>
+      </div>
     </div>
   );
 };

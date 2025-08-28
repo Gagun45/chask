@@ -286,12 +286,15 @@ export const saveTeamTasks = async (
           .filter((t) => t.teamColumnPid === task.teamColumnPid)
           .findIndex((t) => t.pid === filteredTask!.pid);
 
-        const newTeamColumnId = tasks.find(
-          (t) => t.pid === task.pid
-        )?.teamColumnPid;
+        const newTeamColumnId = filteredTask?.teamColumnPid;
+        const newContent = filteredTask?.content;
         return prisma.teamTask.update({
           where: { pid: task.pid },
-          data: { teamColumnPid: newTeamColumnId, orderNumber: index },
+          data: {
+            teamColumnPid: newTeamColumnId,
+            orderNumber: index,
+            content: newContent,
+          },
         });
       });
     const createTasksQuery = tasks
