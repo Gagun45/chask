@@ -1,14 +1,11 @@
-import TeamCard from "@/components/TeamCard/TeamCard";
-import { getOwnTeams } from "@/utils/actions/team.actions";
+import OwnTeams from "@/components/OwnTeams/OwnTeams";
 
-const OwnTeams = async () => {
-  const ownTeams = await getOwnTeams();
+const OwnTeamsPage = () => {
   return (
     <div className="flex flex-col">
       <span>Own Teams</span>
-      {ownTeams.length > 0 &&
-        ownTeams.map((team) => <TeamCard key={team.id} team={team} />)}
+      <OwnTeams />
     </div>
   );
 };
-export default OwnTeams;
+export default OwnTeamsPage;

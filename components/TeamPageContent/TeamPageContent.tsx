@@ -8,6 +8,7 @@ import {
 } from "@/utils/actions/team.actions";
 import { redirect } from "next/navigation";
 import type { teamWithMessages } from "@/utils/types";
+import { MoonLoader } from "react-spinners";
 
 interface Props {
   pid: string;
@@ -29,7 +30,7 @@ const TeamPageContent = ({ pid }: Props) => {
     if (!pid) return;
     fetchContent();
   }, [pid, fetchContent]);
-  if (!team) return null;
+  if (!team) return <MoonLoader />;
   return (
     <>
       <h1 className="text-center text-3xl font-extrabold">{team.name}</h1>
