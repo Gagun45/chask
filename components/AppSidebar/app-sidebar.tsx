@@ -29,12 +29,6 @@ export function AppSidebar() {
               <Link href={"/teams/create"}>Create a team</Link>
             </SidebarMenuButton>
             <SidebarMenuButton onClick={() => setOpenMobile(false)} asChild>
-              <Link href={"/teams/all"}>All teams</Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton onClick={() => setOpenMobile(false)} asChild>
-              <Link href={"/teams/my"}>My teams</Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton onClick={() => setOpenMobile(false)} asChild>
               <Link href={"/teams/own"}>Own teams</Link>
             </SidebarMenuButton>
           </SidebarMenu>

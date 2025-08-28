@@ -9,7 +9,6 @@ import {
 import {
   DndContext,
   DragOverlay,
-  type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
@@ -90,7 +89,7 @@ const DNDContext = () => {
     if (e.active.data.current?.type === "Task")
       setActiveTask(e.active.data.current?.task);
   };
-  const onDragEnd = (e: DragEndEvent) => {
+  const onDragEnd = () => {
     setActiveCol(null);
     setActiveTask(null);
   };

@@ -30,8 +30,8 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
     );
     dispatch(
       setInitialTasks({
-        columns: team.TeamColumn.sort((a, b) => a.orderNumber - b.orderNumber),
-        tasks: team.TeamTask.sort((a, b) => a.orderNumber - b.orderNumber),
+        columns: [...team.TeamColumn].sort((a, b) => a.orderNumber - b.orderNumber),
+        tasks: [...team.TeamTask].sort((a, b) => a.orderNumber - b.orderNumber),
       })
     );
   }, [team, messagesLeft, dispatch]);
