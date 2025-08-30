@@ -10,6 +10,7 @@ import { setInitialMessages } from "@/redux/features/currentTeamMessages/current
 import { formatMessages } from "@/utils/actions/helper";
 import TeamTasks from "./TeamTasks/TeamTasks";
 import { setInitialTasks } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
+import CopyButton from "@/components/CopyButton/CopyButton";
 
 interface Props {
   team: teamWithMessages;
@@ -30,17 +31,22 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
     );
     dispatch(
       setInitialTasks({
-        columns: [...team.TeamColumn].sort((a, b) => a.orderNumber - b.orderNumber),
+        columns: [...team.TeamColumn].sort(
+          (a, b) => a.orderNumber - b.orderNumber
+        ),
         tasks: [...team.TeamTask].sort((a, b) => a.orderNumber - b.orderNumber),
       })
     );
   }, [team, messagesLeft, dispatch]);
   return (
     <Tabs defaultValue="tasks" className="w-9/10">
-      <TabsList className="mx-auto gap-8 bg-first">
-        <TabsTrigger value="chat">Chat</TabsTrigger>
-        <TabsTrigger value="tasks">Tasks</TabsTrigger>
-      </TabsList>
+      <div className="flex relative">
+        <TabsList className="mx-auto gap-8 bg-first">
+          <TabsTrigger value="chat">Chat</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+        </TabsList>
+        <CopyButton value={team.inviteToken} />
+      </div>
       <TabsContent value="chat" className="teamPageTabsContent">
         <TeamChat />
       </TabsContent>

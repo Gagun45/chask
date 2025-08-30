@@ -7,11 +7,12 @@ import type { TeamWithCreatorAndCountMembers } from "@/utils/types";
 interface Props {
   team: TeamWithCreatorAndCountMembers;
   isMember?: boolean | undefined;
+  className?: string;
 }
 
-const TeamCard = ({ team, isMember }: Props) => {
+const TeamCard = ({ team, isMember, className }: Props) => {
   return (
-    <div className="flex flex-col border-2 p-4">
+    <div className={`${className} flex flex-col border-2 p-4`}>
       <div className="relative size-24">
         <Image src={"https://github.com/shadcn.png"} alt="Team Logo" fill />
       </div>

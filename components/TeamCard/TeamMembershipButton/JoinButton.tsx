@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { fetchMyTeams } from "@/redux/features/myTeams/myTeamsSlice";
 import type { AppDispatch } from "@/redux/store";
@@ -8,9 +10,10 @@ import { toast } from "sonner";
 
 interface Props {
   teamId: string;
+  className?: string;
 }
 
-const JoinButton = ({ teamId }: Props) => {
+const JoinButton = ({ teamId, className }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const onJoin = async () => {
     const res = await joinATeam(teamId);
@@ -24,6 +27,10 @@ const JoinButton = ({ teamId }: Props) => {
       redirect(`/teams/team/${res.teamPid}`);
     }
   };
-  return <Button onClick={onJoin}>Join</Button>;
+  return (
+    <Button className={className} onClick={onJoin}>
+      Join
+    </Button>
+  );
 };
 export default JoinButton;
