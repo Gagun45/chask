@@ -15,6 +15,7 @@ import type {
   TeamTaskSingle,
 } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 import { nanoid } from "nanoid";
+import type { Prisma } from "@prisma/client";
 
 export const createNewTeam = async (values: newTeamFormData) => {
   try {
@@ -36,13 +37,25 @@ export const createNewTeam = async (values: newTeamFormData) => {
   }
 };
 
-export const getTeamByInviteToken = async (token: string) => {
+export const getTeamByInviteToken = async (
+  token: string
+): Promise<
+  | { error: string }
+  | {
+      isMember: boolean;
+      team: Prisma.TeamGetPayload<{
+        include: { creator: true; _count: { select: { members: true } } };
+      }>;
+    }
+> => {
   try {
     const team = await prisma.team.findUnique({
       where: { inviteToken: token },
       include: { creator: true, _count: { select: { members: true } } },
     });
-    return { team };
+    if (!team) return { error: "Team not found" };
+    const isMember = await checkMembership(team.id);
+    return { team, isMember };
   } catch (error) {
     console.log("Get team by invite token error: ", error);
     return { error: "Something went wrong" };
