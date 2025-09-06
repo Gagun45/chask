@@ -44,7 +44,7 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
           <TabsTrigger value="chat">Chat</TabsTrigger>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
         </TabsList>
-        <CopyButton value={team.inviteToken} />
+        <CopyButton value={team.inviteToken} className="absolute right-0" />
       </div>
       <TabsContent value="chat" className="teamPageTabsContent">
         <TeamChat />

@@ -1,2 +1,2 @@
 export const authRoutes = ["/login", "/register"];
-export const protectedRoutes = ["/protected", "/teams/all"];
+export const protectedRoutes = ["/teams"];
