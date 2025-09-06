@@ -1,5 +1,5 @@
 import TeamCard from "@/components/TeamCard/TeamCard";
-import { getMyTeams } from "@/utils/actions/team.actions";
+import { getMyTeams } from "@/utils/actions/team.get.actions";
 
 const MyTeams = async () => {
   const myTeams = await getMyTeams();

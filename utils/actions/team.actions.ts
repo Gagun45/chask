@@ -1,11 +1,7 @@
 "use server";
 
 import { safeParse } from "zod";
-import {
-  includeData,
-  type newTeamFormData,
-  type TeamWithCreatorAndCountMembers,
-} from "../types";
+import { type newTeamFormData } from "../types";
 import { newTeamFormSchema } from "../zod/zod-schemas";
 import { smthWentWrong } from "@/config/helper";
 import { prisma } from "@/prisma/prisma";
@@ -15,7 +11,6 @@ import type {
   TeamTaskSingle,
 } from "@/redux/features/currentTeamTasks/currentTeamTasksSlice";
 import { nanoid } from "nanoid";
-import type { Prisma } from "@prisma/client";
 
 export const createNewTeam = async (values: newTeamFormData) => {
   try {
@@ -34,63 +29,6 @@ export const createNewTeam = async (values: newTeamFormData) => {
   } catch (error) {
     console.log("Create new team error: ", error);
     return { ...smthWentWrong };
-  }
-};
-
-export const getTeamByInviteToken = async (
-  token: string
-): Promise<
-  | { error: string }
-  | {
-      isMember: boolean;
-      team: Prisma.TeamGetPayload<{
-        include: { creator: true; _count: { select: { members: true } } };
-      }>;
-    }
-> => {
-  try {
-    const team = await prisma.team.findUnique({
-      where: { inviteToken: token },
-      include: { creator: true, _count: { select: { members: true } } },
-    });
-    if (!team) return { error: "Team not found" };
-    const isMember = await checkMembership(team.id);
-    return { team, isMember };
-  } catch (error) {
-    console.log("Get team by invite token error: ", error);
-    return { error: "Something went wrong" };
-  }
-};
-
-export const getOwnTeams = async (): Promise<
-  TeamWithCreatorAndCountMembers[]
-> => {
-  try {
-    const userId = await getUserId();
-    const ownTeams = await prisma.team.findMany({
-      where: { creatorId: userId },
-      include: { creator: true, _count: { select: { members: true } } },
-    });
-    return ownTeams;
-  } catch (error) {
-    console.log("Get own teams error: ", error);
-    return [];
-  }
-};
-
-export const getMyTeams = async (): Promise<
-  TeamWithCreatorAndCountMembers[]
-> => {
-  try {
-    const userId = await getUserId();
-    const myTeams = await prisma.team.findMany({
-      where: { members: { some: { userId } } },
-      include: { creator: true, _count: { select: { members: true } } },
-    });
-    return myTeams;
-  } catch (error) {
-    console.log("Get my teams error: ", error);
-    return [];
   }
 };
 
@@ -137,47 +75,6 @@ export const leaveATeam = async (teamId: string) => {
   } catch (error) {
     console.log("Leave a team error: ", error);
     return { ...smthWentWrong };
-  }
-};
-
-export const getTeamByPid = async (teamPid: string) => {
-  try {
-    const team = await prisma.team.findUniqueOrThrow({
-      where: { pid: teamPid },
-      include: includeData,
-    });
-    return team;
-  } catch (error) {
-    console.log("Get team by pid error: ", error);
-    return null;
-  }
-};
-
-export const getTeamWithMessagesByPid = async (teamPid: string) => {
-  try {
-    const userId = await getUserId();
-    const team = await prisma.team.findUniqueOrThrow({
-      where: { pid: teamPid, members: { some: { userId } } },
-      include: {
-        TeamMessage: {
-          include: { sender: true },
-          where: { softDeleted: false },
-          orderBy: { createdAt: "desc" },
-          take: 5,
-        },
-        TeamColumn: true,
-        TeamTask: true,
-      },
-    });
-    const messagesLeft = await prisma.teamMessage.count({
-      where: { teamId: team.id, softDeleted: false },
-    });
-    return {
-      data: { team, messagesLeft: messagesLeft - team.TeamMessage.length },
-    };
-  } catch (error) {
-    console.log("Get team by pid error: ", error);
-    return null;
   }
 };
 

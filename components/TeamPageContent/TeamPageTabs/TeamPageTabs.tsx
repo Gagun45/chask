@@ -20,7 +20,6 @@ interface Props {
 const TeamPageTabs = ({ messagesLeft, team }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    console.log("UPDATIND REDUX CURRENT TEAM");
     const formattedMessages = formatMessages(team.TeamMessage);
     dispatch(
       setInitialMessages({
@@ -39,7 +38,7 @@ const TeamPageTabs = ({ messagesLeft, team }: Props) => {
     );
   }, [team, messagesLeft, dispatch]);
   return (
-    <Tabs defaultValue="tasks" className="w-9/10">
+    <Tabs defaultValue="chat" className="w-9/10">
       <div className="flex relative">
         <TabsList className="mx-auto gap-8 bg-first">
           <TabsTrigger value="chat">Chat</TabsTrigger>

@@ -2,13 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import TeamPageTabs from "./TeamPageTabs/TeamPageTabs";
-import {
-  checkMembership,
-  getTeamWithMessagesByPid,
-} from "@/utils/actions/team.actions";
 import { redirect } from "next/navigation";
 import type { teamWithMessages } from "@/utils/types";
 import { MoonLoader } from "react-spinners";
+import { getTeamWithMessagesByPid } from "@/utils/actions/team.get.actions";
 
 interface Props {
   pid: string;
@@ -19,12 +16,13 @@ const TeamPageContent = ({ pid }: Props) => {
   const [messagesLeft, setMessagesLeft] = useState(0);
   const fetchContent = useCallback(async () => {
     const res = await getTeamWithMessagesByPid(pid);
-    if (!res) return <span>Team not found</span>;
-    const { team, messagesLeft } = res.data;
+    if ("error" in res) {
+      return <div>Team not found</div>;
+    }
+    const { team, messagesLeft, isMember } = res.data;
+    if (!isMember) redirect("/");
     setTeam(team);
     setMessagesLeft(messagesLeft);
-    const isMember = await checkMembership(team.id);
-    if (!isMember) redirect("/");
   }, [pid]);
   useEffect(() => {
     if (!pid) return;

@@ -1,5 +1,5 @@
 import type { RootState } from "@/redux/store";
-import { getMyTeams } from "@/utils/actions/team.actions";
+import { getMyTeams } from "@/utils/actions/team.get.actions";
 import type { StatusType } from "@/utils/types";
 import type { Team } from "@prisma/client";
 import {

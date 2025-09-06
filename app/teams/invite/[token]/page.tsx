@@ -1,7 +1,7 @@
 import TeamCard from "@/components/TeamCard/TeamCard";
 import JoinButton from "@/components/TeamCard/TeamMembershipButton/JoinButton";
 import { buttonVariants } from "@/components/ui/button";
-import { getTeamByInviteToken } from "@/utils/actions/team.actions";
+import { getTeamByInviteToken } from "@/utils/actions/team.get.actions";
 
 interface Props {
   params: Promise<{ token: string }>;

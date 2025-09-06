@@ -1,10 +1,10 @@
 "use client";
 
-import { getOwnTeams } from "@/utils/actions/team.actions";
 import type { TeamWithCreatorAndCountMembers } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 import TeamCard from "../TeamCard/TeamCard";
 import { FadeLoader } from "react-spinners";
+import { getOwnTeams } from "@/utils/actions/team.get.actions";
 
 const OwnTeams = () => {
   const [isLoading, setIsLoading] = useState(true);

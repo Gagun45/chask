@@ -25,10 +25,10 @@ export type TeamMessageWithSender = Prisma.TeamMessageGetPayload<{
 }>;
 
 export type TeamWithCreatorAndCountMembers = Prisma.TeamGetPayload<{
-  include: { creator: true; _count: { select: { members: true } } };
+  include: typeof includeCreatorAndMembersCount;
 }>;
 
-export const includeData = {
+export const includeCreatorAndMembersCount = {
   creator: true,
   _count: { select: { members: true } },
-};
+} as const;
